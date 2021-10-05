@@ -24,7 +24,7 @@ $routes = [
 ]
 ?>
 
-<div class="flex flex-col w-96 p-8 border-r border-gray-200 shadow">
+<div class="flex flex-col w-80 px-8 py-7 border-r border-gray-200 shadow">
     <div class="flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="34" height="23.409" viewBox="0 0 34 23.409">
             <g id="Group_40" data-name="Group 40" transform="translate(-12.28 -32.476)">
@@ -35,7 +35,7 @@ $routes = [
                 </g>
             </g>
         </svg>
-        <h2 class="text-3xl ml-4 font-extrabold text-gray-900">Laravel LAS</h2>
+        <h1 class="text-3xl ml-4 font-extrabold text-gray-900">Laravel LAS</h1>
     </div>
     @auth
     <nav class="my-8 flex-1">
