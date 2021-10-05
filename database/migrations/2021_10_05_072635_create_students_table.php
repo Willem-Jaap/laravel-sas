@@ -21,7 +21,7 @@ class CreateStudentsTable extends Migration
             $table->string('last_name', 24);
             $table->string('postal_code', 6);
             $table->string('street', 32);
-            $table->number('number', 5);
+            $table->integer('number', 5);
             $table->string('number_addition', 6);
             $table->string('city', 64);
             $table->timestamps();

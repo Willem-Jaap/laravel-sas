@@ -15,10 +15,10 @@ class CreateResultsTable extends Migration
     {
         Schema::create('results', function (Blueprint $table) {
             $table->id();
-            $table->foreign('student_id')->constrainted();
-            $table->foreign('education_id')->constrainted();
-            $table->foreign('lesson_id')->constrainted();
-            $table->decimal('result', 4);
+            $table->string('student_id');
+            $table->string('education_id');
+            $table->string('lesson_id');
+            $table->string('result', 4);
             $table->timestamps();
         });
     }
