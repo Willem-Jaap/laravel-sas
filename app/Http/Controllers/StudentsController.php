@@ -14,7 +14,8 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        //
+        $students = Student::latest()->paginate(5);
+        return view('students.index', compact('students'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -24,7 +25,47 @@ class StudentsController extends Controller
      */
     public function create()
     {
-        //
+
+        $formInputs = [
+            [
+                'name' => 'first_name',
+                'label' => 'Voornaam'
+            ],
+            [
+                'name' => 'initials',
+                'label' => 'Initialen'
+            ],
+            [
+                'name' => 'insertion',
+                'label' => 'Tussenvoegsel'
+            ],
+            [
+                'name' => 'last_name',
+                'label' => 'Achternaam'
+            ],
+            [
+                'name' => 'postal_code',
+                'label' => 'Postcode'
+            ],
+            [
+                'name' => 'street',
+                'label' => 'Straatnaam'
+            ],
+            [
+                'name' => 'number',
+                'label' => 'Nummer'
+            ],
+            [
+                'name' => 'number_addition',
+                'label' => 'Toevoeging'
+            ],
+            [
+                'name' => 'city',
+                'label' => 'Stad / Dorp'
+            ],
+        ];
+
+        return view('students.create', compact('formInputs'));
     }
 
     /**
@@ -46,7 +87,7 @@ class StudentsController extends Controller
      */
     public function show(Student $student)
     {
-        //
+        return view('students.show', compact('student'));
     }
 
     /**
@@ -57,7 +98,7 @@ class StudentsController extends Controller
      */
     public function edit(Student $student)
     {
-        //
+        return view('students.edit', compact('student'));
     }
 
     /**
