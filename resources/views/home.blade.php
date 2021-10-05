@@ -15,6 +15,7 @@
         <div>
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Welkom {{ Auth::user()->name }}</h2>
             <p class="mt-2 text-center text-sm text-gray-600">Email: {{ Auth::user()->email }}</p>
+            <p class="mt-2 text-center text-sm text-gray-600">Klik <a class="font-medium text-indigo-600 hover:text-indigo-500" href="{{route('students.index')}}">hier</a> om naar studenten te bekijken.</p>
         </div>
     </div>
     @endauth
