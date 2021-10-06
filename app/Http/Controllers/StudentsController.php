@@ -76,7 +76,19 @@ class StudentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'first_name' => 'required',
+            'initials' => 'required',
+            'last_name' => 'required',
+            'postal_code' => 'required',
+            'street' => 'required',
+            'number' => 'required',
+            'city' => 'required',
+        ]);
+
+        Student::create($request->all());
+
+        return redirect()->route('students.index')->with('success', 'Student created successfully');
     }
 
     /**
