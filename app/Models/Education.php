@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Education extends Model
 {
     use HasFactory;
+
+    /**
+     * 
+     * The table for retrieving en writing data.
+     */
+    protected $table = 'educations';
+
     /**
      * The attributes that are mass assignable.
      * 

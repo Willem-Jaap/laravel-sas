@@ -14,7 +14,8 @@ class LessonsController extends Controller
      */
     public function index()
     {
-        return view('lessons.index');
+        $lessons = Lesson::latest()->paginate(5);
+        return view('lessons.index', compact('lessons'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -24,7 +25,14 @@ class LessonsController extends Controller
      */
     public function create()
     {
-        //
+        $formInputs = [
+            [
+                'name'  => 'name',
+                'label' => 'Lesnaam'
+            ],
+        ];
+
+        return view('lessons.create', compact('formInputs'));
     }
 
     /**
@@ -35,7 +43,14 @@ class LessonsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'       => 'required',
+        ]);
+
+        Lesson::create($request->all());
+
+        return redirect()->route('lessons.index')->with('success', 'Les created successfully');
+
     }
 
     /**

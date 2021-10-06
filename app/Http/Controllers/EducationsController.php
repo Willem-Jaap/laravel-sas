@@ -14,7 +14,8 @@ class EducationsController extends Controller
      */
     public function index()
     {
-        return view('educations.index');
+        $educations = Education::latest()->paginate(5);
+        return view('educations.index', compact('educations'))->with('i', (request()->input('page', 5) - 1) * 5);
     }
 
     /**
@@ -24,7 +25,25 @@ class EducationsController extends Controller
      */
     public function create()
     {
-        //
+       
+        $formInputs = [
+            [
+                'name'  => 'name',
+                'label' => 'Opleidingsnaam'
+            ],
+            [
+                'name'  => 'date_start',
+                'label' => 'Start datum',
+                'type'  => 'date'
+            ],
+            [
+                'name'  => 'date_end',
+                'label' => 'Eind datum',
+                'type' => 'date'
+            ],
+        ];
+
+        return view('educations.create', compact('formInputs'));
     }
 
     /**
@@ -35,7 +54,16 @@ class EducationsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'       => 'required',
+            'date_start' => 'required',
+            'date_end'   => 'required',
+        ]);
+
+        Education::create($request->all());
+
+        return redirect()->route('educations.index')->with('success', 'Opleiding created successfully');
+   
     }
 
     /**
