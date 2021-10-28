@@ -30,7 +30,7 @@ class LessonsController extends Controller
     {
         $formInputs = [
             [
-                'name'  => 'name',
+                'name'  => 'lesson_name',
                 'label' => 'Lesnaam'
             ],
         ];
@@ -49,11 +49,11 @@ class LessonsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'lesson_name' => 'required',
         ]);
 
+        // var_dump( Lesson::create($request->all()));exit;
         Lesson::create($request->all());
-
         return redirect()->route('lessons.index')->with('success', 'Les created successfully');
     }
 

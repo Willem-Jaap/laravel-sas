@@ -25,7 +25,7 @@
 
                 @foreach ($students as $student)
                 <div class="grid grid-cols-3 px-8 py-3 border-b border-gray-200">
-                    <div>{{ $i }}</div>
+                    <div>{{ $student->id }}</div>
                     <div>{{ $student->first_name }} ({{ $student->initials }}) {{ $student->last_name ? ' ' . $student->insertion : '' }}
                         {{ $student->last_name }}</div>
                     <div>{{ $student->street }}

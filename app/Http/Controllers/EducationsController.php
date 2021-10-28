@@ -28,7 +28,7 @@ class EducationsController extends Controller
        
         $formInputs = [
             [
-                'name'  => 'name',
+                'name'  => 'education_name',
                 'label' => 'Opleidingsnaam'
             ],
             [
@@ -55,7 +55,7 @@ class EducationsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'       => 'required',
+            'education_name' => 'required',
             'date_start' => 'required',
             'date_end'   => 'required',
         ]);

@@ -28,12 +28,15 @@
 
                 @foreach ($results as $result)
                 <div class="grid grid-cols-5 px-8 py-3 border-b border-gray-200">
-                    <div>{{ $i }}</div>
-                    <div>{{ $lesson->name }}</div>
+                    <div>{{ $result->id}}</div>
+                    <div>{{ $result->first_name }} ({{ $result->initials }}) {{ $result->insertion }} {{ $result->last_name }}</div>
+                    <div>{{ $result->education_name }}</div>
+                    <div>{{ $result->lesson_name }}</div>
+                    <div>{{ $result->result }}</div>
                 </div>
                 @endforeach
             </div>
-            {!! $results->links() !!}
+            {{-- {!! $results->links() !!} --}}
         </main>
     </div>
 </div>

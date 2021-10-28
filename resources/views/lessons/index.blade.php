@@ -25,8 +25,8 @@
 
                 @foreach ($lessons as $lesson)
                 <div class="grid grid-cols-4 px-8 py-3 border-b border-gray-200">
-                    <div>{{ $i }}</div>
-                    <div>{{ $lesson->name }}</div>
+                    <div>{{ $lesson->id }}</div>
+                    <div>{{ $lesson->lesson_name }}</div>
                 </div>
                 @endforeach
             </div>
