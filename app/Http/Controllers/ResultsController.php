@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Education;
 use App\Models\Result;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class ResultsController extends Controller
@@ -14,7 +16,9 @@ class ResultsController extends Controller
      */
     public function index()
     {
-        return view('results.index');
+        $results = Result::latest()->paginate(5);
+
+        return view('results.index', compact('results'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -24,7 +28,30 @@ class ResultsController extends Controller
      */
     public function create()
     {
-        //
+        $formInputs = [
+            [
+                'name'  => 'student_id',
+                'label' => 'Student',
+                'type'  => 'select',
+                'options' => 'students',
+                'key'   => 'id',
+                'value' => 'first_name'
+            ],
+            [
+                'name'  => 'education_id',
+                'label' => 'Opleiding',
+                'type'  => 'select',
+                'options' => 'educations',
+                'key'   => 'id',
+                'value' => 'label'
+            ],
+        ];
+
+        $results = Result::all();
+        $students = Student::all();
+        $educations = Education::all();
+
+        return view('results.create', compact('formInputs'))->with('results', $results)->with('students', $students)->with('educations', $educations);
     }
 
     /**
@@ -35,7 +62,13 @@ class ResultsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+        ]);
+
+        Result::create($request->all());
+
+        return redirect()->route('results.index')->with('success', 'Les created successfully');
     }
 
     /**
