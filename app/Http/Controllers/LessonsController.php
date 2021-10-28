@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Education;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,9 @@ class LessonsController extends Controller
     public function index()
     {
         $lessons = Lesson::latest()->paginate(5);
+
         return view('lessons.index', compact('lessons'))->with('i', (request()->input('page', 1) - 1) * 5);
+        // return view('lessons.index', compact('lessons'))->with('educations');
     }
 
     /**
@@ -32,7 +35,9 @@ class LessonsController extends Controller
             ],
         ];
 
-        return view('lessons.create', compact('formInputs'));
+        $educations = Education::all();
+
+        return view('lessons.create', compact('formInputs'))->with('educations', $educations);
     }
 
     /**
@@ -44,13 +49,12 @@ class LessonsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'       => 'required',
+            'name' => 'required',
         ]);
 
         Lesson::create($request->all());
 
         return redirect()->route('lessons.index')->with('success', 'Les created successfully');
-
     }
 
     /**
