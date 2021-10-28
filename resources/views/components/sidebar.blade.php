@@ -21,6 +21,11 @@ $routes = [
         'url' => 'educations',
         'label' => 'Opleidingen'
     ],
+    [
+        'route' => 'results.index',
+        'url' => 'results',
+        'label' => 'Resultaten'
+    ],
 ]
 ?>
 
@@ -41,7 +46,8 @@ $routes = [
     <nav class="my-8 flex-1">
         <ul class="-mx-8">
             @foreach($routes as $route)
-            <li><a class="block px-8 py-3 border-r-4 border-gray-200 hover:border-indigo-300 {{ (request()->is($route['url'] . '*')) ? 'border-indigo-600 hover:border-indigo-600' : '' }}" href="{{ route($route['route']) }} ">{{ $route['label'] }}</a></li>
+            <li><a class="block px-8 py-3 border-r-4 border-gray-200 hover:border-indigo-300 {{ (request()->is($route['url'] . '*')) ? 'border-indigo-600 hover:border-indigo-600' : '' }}"
+                    href="{{ route($route['route']) }} ">{{ $route['label'] }}</a></li>
             @endforeach
         </ul>
     </nav>
