@@ -28,12 +28,9 @@ class LessonsController extends Controller
      */
     public function create()
     {
-        $formInputs = [
-            [
-                'name'  => 'lesson_name',
-                'label' => 'Lesnaam'
-            ],
-        ];
+
+        $formInputs = $this->form();
+        $formInputs['method'] = 'create';
 
         $educations = Education::all();
 
@@ -52,7 +49,6 @@ class LessonsController extends Controller
             'lesson_name' => 'required',
         ]);
 
-        // var_dump( Lesson::create($request->all()));exit;
         Lesson::create($request->all());
         return redirect()->route('lessons.index')->with('success', 'Les created successfully');
     }
@@ -76,7 +72,11 @@ class LessonsController extends Controller
      */
     public function edit(Lesson $lesson)
     {
-        //
+        $formInputs = $this->form();
+        $formInputs['method'] = 'update';
+        $formInputs['model'] = 'lesson';
+
+        return view('lessons.edit', compact('formInputs'))->with('lesson', $lesson);
     }
 
     /**
@@ -88,17 +88,39 @@ class LessonsController extends Controller
      */
     public function update(Request $request, Lesson $lesson)
     {
-        //
+        $request->validate([
+            'lesson_name' => 'required',
+        ]);
+
+        $lesson->update($request->all());
+
+        return redirect()->route('lessons.index')->with('success', 'Les updated successfully');
     }
+
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Lesson  $lesson
-     * @return \Illuminate\Http\Response
+     * @param  int  $id
+     * @return Response
      */
-    public function destroy(Lesson $lesson)
+    public function destroy($id)
     {
-        //
+        $result = Lesson::find($id);
+        $result->delete();
+
+        return redirect()->route('lessons.index')->with('success', 'Lesson deleted successfully');
+    }
+
+    private function form()
+    {
+        $formInputs = [
+            [
+                'name'  => 'lesson_name',
+                'label' => 'Lesnaam'
+            ],
+        ];
+
+        return $formInputs;
     }
 }
