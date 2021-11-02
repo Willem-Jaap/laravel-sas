@@ -18,11 +18,7 @@ class ResultsController extends Controller
      */
     public function index()
     {
-        $results = DB::table('results') 
-            ->leftJoin('students', 'results.student_id', '=', 'students.id')
-            ->leftJoin('educations', 'results.education_id', '=', 'educations.id')
-            ->leftJoin('lessons', 'results.lesson_id', '=', 'lessons.id')
-            ->get();
+        $results = Result::with(['student', 'education', 'lesson'])->get();
 
         return view('results.index', compact('results'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
@@ -33,6 +29,107 @@ class ResultsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
+    {
+
+        $formInputs = $this->form();
+
+        $results = Result::all();
+        $lessons = Lesson::all();
+        $students = Student::all();
+        $educations = Education::all();
+
+        return view('results.create', compact('formInputs'))->with('results', $results)->with('students', $students)->with('educations', $educations)->with('lessons', $lessons);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'student_id' => 'required',
+            'education_id' => 'required',
+            'lesson_id' => 'required',
+            'result' => 'required',
+        ]);
+
+        Result::create($request->all());
+
+        return redirect()->route('results.index')->with('success', 'Les created successfully');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Result  $result
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Result $result)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Result  $result
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Result $result)
+    {
+        $formInputs = $this->form();
+        $formInputs['method'] = 'update';
+        $formInputs['model'] = 'result';
+
+        $lessons = Lesson::all();
+        $students = Student::all();
+        $educations = Education::all();
+
+        return view('results.edit', compact('formInputs'))->with('result', $result)->with('students', $students)->with('educations', $educations)->with('lessons', $lessons);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Result  $result
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Result $result)
+    {
+        $request->validate([
+            'student_id' => 'required',
+            'education_id' => 'required',
+            'lesson_id' => 'required',
+            'result' => 'required',
+        ]);
+
+        $result->update($request->all());
+
+        return redirect()->route('results.index')->with('success', 'Result updated successfully');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        // var_dump($id);exit;
+        $result = Result::find($id);
+        // var_dump($result);exit;
+        $result->delete();
+
+        return redirect()->route('results.index')->with('success', 'Result deleted successfully');
+    }
+
+
+    private function form()
     {
         $formInputs = [
             [
@@ -66,77 +163,6 @@ class ResultsController extends Controller
             ],
         ];
 
-        $results = Result::all();
-        $lessons = Lesson::all();
-        $students = Student::all();
-        $educations = Education::all();
-
-        return view('results.create', compact('formInputs'))->with('results', $results)->with('students', $students)->with('educations', $educations)->with('lessons', $lessons);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        // var_dump($request);exit;
-        $request->validate([
-            'student_id' => 'required',
-            'education_id' => 'required',
-            'lesson_id' => 'required',
-            'result' => 'required',
-        ]);
-
-        Result::create($request->all());
-
-        return redirect()->route('results.index')->with('success', 'Les created successfully');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Result  $result
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Result $result)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Result  $result
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Result $result)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Result  $result
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Result $result)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Result  $result
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Result $result)
-    {
-        //
+        return $formInputs;
     }
 }
