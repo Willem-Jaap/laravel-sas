@@ -120,9 +120,7 @@ class ResultsController extends Controller
      */
     public function destroy($id)
     {
-        // var_dump($id);exit;
         $result = Result::find($id);
-        // var_dump($result);exit;
         $result->delete();
 
         return redirect()->route('results.index')->with('success', 'Result deleted successfully');
