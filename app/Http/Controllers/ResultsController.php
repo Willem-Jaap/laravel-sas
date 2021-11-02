@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Education;
+use App\Models\Lesson;
 use App\Models\Result;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ResultsController extends Controller
 {
@@ -16,7 +18,11 @@ class ResultsController extends Controller
      */
     public function index()
     {
-        $results = Result::latest()->paginate(5);
+        $results = DB::table('results') 
+            ->leftJoin('students', 'results.student_id', '=', 'students.id')
+            ->leftJoin('educations', 'results.education_id', '=', 'educations.id')
+            ->leftJoin('lessons', 'results.lesson_id', '=', 'lessons.id')
+            ->get();
 
         return view('results.index', compact('results'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
@@ -43,15 +49,29 @@ class ResultsController extends Controller
                 'type'  => 'select',
                 'options' => 'educations',
                 'key'   => 'id',
-                'value' => 'label'
+                'value' => 'education_name'
+            ],
+            [
+                'name'  => 'lesson_id',
+                'label' => 'Vak',
+                'type'  => 'select',
+                'options' => 'lessons',
+                'key'   => 'id',
+                'value' => 'lesson_name'
+            ],
+            [
+                'name'  => 'result',
+                'label' => 'Cijfer',
+                'type'  => 'number',
             ],
         ];
 
         $results = Result::all();
+        $lessons = Lesson::all();
         $students = Student::all();
         $educations = Education::all();
 
-        return view('results.create', compact('formInputs'))->with('results', $results)->with('students', $students)->with('educations', $educations);
+        return view('results.create', compact('formInputs'))->with('results', $results)->with('students', $students)->with('educations', $educations)->with('lessons', $lessons);
     }
 
     /**
@@ -62,8 +82,12 @@ class ResultsController extends Controller
      */
     public function store(Request $request)
     {
+        // var_dump($request);exit;
         $request->validate([
-            'name' => 'required',
+            'student_id' => 'required',
+            'education_id' => 'required',
+            'lesson_id' => 'required',
+            'result' => 'required',
         ]);
 
         Result::create($request->all());
