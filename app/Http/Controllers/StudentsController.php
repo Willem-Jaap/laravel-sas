@@ -25,45 +25,9 @@ class StudentsController extends Controller
      */
     public function create()
     {
+        $formInputs = $this->form();
+        $formInputs['method'] = 'create';
 
-        $formInputs = [
-            [
-                'name' => 'first_name',
-                'label' => 'Voornaam'
-            ],
-            [
-                'name' => 'initials',
-                'label' => 'Initialen'
-            ],
-            [
-                'name' => 'insertion',
-                'label' => 'Tussenvoegsel'
-            ],
-            [
-                'name' => 'last_name',
-                'label' => 'Achternaam'
-            ],
-            [
-                'name' => 'postal_code',
-                'label' => 'Postcode'
-            ],
-            [
-                'name' => 'street',
-                'label' => 'Straatnaam'
-            ],
-            [
-                'name' => 'number',
-                'label' => 'Nummer'
-            ],
-            [
-                'name' => 'number_addition',
-                'label' => 'Toevoeging'
-            ],
-            [
-                'name' => 'city',
-                'label' => 'Stad / Dorp'
-            ],
-        ];
 
         return view('students.create', compact('formInputs'));
     }
@@ -110,7 +74,11 @@ class StudentsController extends Controller
      */
     public function edit(Student $student)
     {
-        return view('students.edit', compact('student'));
+        $formInputs = $this->form();
+        $formInputs['method'] = 'update';
+        $formInputs['model'] = 'student';
+
+        return view('students.edit', compact('student'))->with('formInputs', $formInputs);
     }
 
     /**
@@ -122,17 +90,78 @@ class StudentsController extends Controller
      */
     public function update(Request $request, Student $student)
     {
-        //
+        $request->validate([
+            'first_name' => 'required',
+            'initials' => 'required',
+            'last_name' => 'required',
+            'postal_code' => 'required',
+            'street' => 'required',
+            'number' => 'required',
+            'city' => 'required',
+        ]);
+
+        $student->update($request->all());
+
+        return redirect()->route('students.index')->with('success', 'Student updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Student  $student
-     * @return \Illuminate\Http\Response
+     * @param  int  $id
+     * @return Response
      */
-    public function destroy(Student $student)
+    public function destroy($id)
     {
-        //
+        $result = Student::find($id);
+        $result->delete();
+
+        return redirect()->route('students.index')->with('success', 'Student deleted successfully');
+    }
+
+
+
+    private function form()
+    {
+        $formInputs = [
+            [
+                'name' => 'first_name',
+                'label' => 'Voornaam'
+            ],
+            [
+                'name' => 'initials',
+                'label' => 'Initialen'
+            ],
+            [
+                'name' => 'insertion',
+                'label' => 'Tussenvoegsel'
+            ],
+            [
+                'name' => 'last_name',
+                'label' => 'Achternaam'
+            ],
+            [
+                'name' => 'postal_code',
+                'label' => 'Postcode'
+            ],
+            [
+                'name' => 'street',
+                'label' => 'Straatnaam'
+            ],
+            [
+                'name' => 'number',
+                'label' => 'Nummer'
+            ],
+            [
+                'name' => 'number_addition',
+                'label' => 'Toevoeging'
+            ],
+            [
+                'name' => 'city',
+                'label' => 'Stad / Dorp'
+            ],
+        ];
+
+        return $formInputs;
     }
 }
