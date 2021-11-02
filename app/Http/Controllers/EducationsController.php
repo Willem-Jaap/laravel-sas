@@ -25,7 +25,7 @@ class EducationsController extends Controller
      */
     public function create()
     {
-       
+
         $formInputs = [
             [
                 'name'  => 'education_name',
@@ -42,6 +42,7 @@ class EducationsController extends Controller
                 'type' => 'date'
             ],
         ];
+        $formInputs['method'] = 'create';
 
         return view('educations.create', compact('formInputs'));
     }
@@ -63,7 +64,6 @@ class EducationsController extends Controller
         Education::create($request->all());
 
         return redirect()->route('educations.index')->with('success', 'Opleiding created successfully');
-   
     }
 
     /**

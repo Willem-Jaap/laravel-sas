@@ -32,6 +32,7 @@ class ResultsController extends Controller
     {
 
         $formInputs = $this->form();
+        $formInputs['method'] = 'create';
 
         $results = Result::all();
         $lessons = Lesson::all();
